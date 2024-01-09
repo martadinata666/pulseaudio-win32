@@ -6,7 +6,7 @@ RUN zypper --non-interactive addrepo obs://windows:mingw:win64 mingw64 && \
 RUN zypper --non-interactive install \
         wget m4 git-core meson bsdtar gzip xmlstarlet findutils \
         mingw64-filesystem mingw64-cross-gcc mingw64-cross-gcc-c++ mingw64-cross-binutils mingw64-cross-pkgconf && \
-    rpm -ql mingw64-cross-gcc
+    rpm -ql mingw64-cross-gcc &&  \
     zypper clean
 RUN mkdir -p /usr/local/share/meson/cross && \
     wget -qO /usr/local/share/meson/cross/mingw64 https://raw.githubusercontent.com/mesonbuild/meson/ca30550e065991f9b2438e2a6fabc64fd2248806/cross/linux-mingw-w64-32bit.txt
