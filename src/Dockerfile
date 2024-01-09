@@ -1,7 +1,7 @@
 ### Base images ###
 
 FROM opensuse/tumbleweed AS mingw64
-RUN zypper --non-interactive addrepo https://download.opensuse.org/repositories/windows:mingw:win32/openSUSE_Tumbleweed/windows:mingw:win32.repo && \
+RUN zypper --non-interactive addrepo https://download.opensuse.org/repositories/windows:mingw:win64/openSUSE_Tumbleweed/windows:mingw:win32.repo && \
     zypper --non-interactive --gpg-auto-import-keys refresh
 RUN zypper --non-interactive install \
         wget m4 git-core meson bsdtar gzip xmlstarlet findutils \
