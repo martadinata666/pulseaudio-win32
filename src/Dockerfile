@@ -91,7 +91,8 @@ COPY ./pulseaudio/* /src/
 RUN git -C /src/pulseaudio apply /src/0001-client-conf-Enable-auto-connect-localhost-by-default.patch
 RUN git -C /src/pulseaudio apply /src/0002-system.pa-Tweaks-for-custom-build.patch
 RUN git -C /src/pulseaudio apply /src/0003-system.pa-Tweaks-for-custom-build-with-unix-sockets.patch
-RUN git -C /src/pulseaudio apply /src/0004-build-sys-meson-Fix-building-without-GIO.patch
+# GIO already disabled by default
+#RUN git -C /src/pulseaudio apply /src/0004-build-sys-meson-Fix-building-without-GIO.patch
 ARG PAW32_VERSION=unknown
 RUN git -C /src/pulseaudio describe --always --tags | \
     sed -e "s/^v//g" -e "s/$/-paw32-${PAW32_VERSION}/g" | \
