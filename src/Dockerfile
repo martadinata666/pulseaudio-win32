@@ -11,7 +11,7 @@ RUN mkdir -p /usr/local/share/meson/cross && \
     wget -qO /usr/local/share/meson/cross/mingw64 https://raw.githubusercontent.com/mesonbuild/meson/ca30550e065991f9b2438e2a6fabc64fd2248806/cross/linux-mingw-w64-32bit.txt
 
 FROM alpine AS imgstuff
-RUN apk add --no-cache librsvg imagemagick
+RUN apk add --no-cache librsvg imagemagick rsvg-convert
 
 # in alpine 3.14, wine 6.0 doesn't start for some reason
 FROM i386/alpine:3.13 AS wine
