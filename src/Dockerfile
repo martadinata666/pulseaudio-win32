@@ -108,7 +108,7 @@ RUN meson setup \
         -Dmodlibexecdir=/pulseaudio/bin \
         -Dbluez5=disabled \
         -Dgsettings=disabled \
-        -Dgstreamer=disabled \
+        -Dgstreamer=false \
         # _WIN32_WINNT=_WIN32_WINNT_WIN7
         -Dc_args="-D__USE_MINGW_ANSI_STDIO=1 -D_WIN32_WINNT=0x0601" \
         /build/pulseaudio /src/pulseaudio
