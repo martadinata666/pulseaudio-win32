@@ -145,7 +145,7 @@ RUN touch /tmp/pulseaudio.rc && \
     echo '    }' >> /tmp/pulseaudio.rc && \
     echo '}' >> /tmp/pulseaudio.rc
 # note: it needs to be in a subdir (/tmp) or windres gives an assertion error about include directories
-RUN x86_64-w64-mingw64-windres /tmp/pulseaudio.rc -o /pulseaudio.res
+RUN x86_64-w64-mingw32-windres /tmp/pulseaudio.rc -o /pulseaudio.res
 
 FROM reshack AS build-pulseaudio-stage2
 COPY --from=build-pulseaudio-stage1 /pulseaudio         /pulseaudio
@@ -189,8 +189,8 @@ FROM mingw64 AS build-pasvc
 COPY ./pasvc/* /src/
 RUN mkdir -p /pasvc/bin
 ARG PAW32_VERSION=unknown
-RUN x86_64-w64-mingw64-gcc -Wall -Wextra -Werror -D_WIN32_WINNT=_WIN32_WINNT_VISTA -DPAW32_VERSION='"'"${PAW32_VERSION}"'"' /src/pasvc.c   -o /pasvc/bin/pasvc.exe   -lshlwapi -lshell32
-RUN x86_64-w64-mingw64-gcc -Wall -Wextra -Werror -D_WIN32_WINNT=_WIN32_WINNT_VISTA -DPAW32_VERSION='"'"${PAW32_VERSION}"'"' /src/pasvcfw.c -o /pasvc/bin/pasvcfw.exe -lshlwapi -lole32 -loleaut32
+RUN x86_64-w64-mingw32-gcc -Wall -Wextra -Werror -D_WIN32_WINNT=_WIN32_WINNT_VISTA -DPAW32_VERSION='"'"${PAW32_VERSION}"'"' /src/pasvc.c   -o /pasvc/bin/pasvc.exe   -lshlwapi -lshell32
+RUN x86_64-w64-mingw32-gcc -Wall -Wextra -Werror -D_WIN32_WINNT=_WIN32_WINNT_VISTA -DPAW32_VERSION='"'"${PAW32_VERSION}"'"' /src/pasvcfw.c -o /pasvc/bin/pasvcfw.exe -lshlwapi -lole32 -loleaut32
 RUN bsdtar -acf /pasvc.zip -C / pasvc
 
 ### pasetup ###
