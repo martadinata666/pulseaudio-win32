@@ -16,6 +16,9 @@ improvements.
 - HTML documentation.
 - Works on Windows 7 and later.
 
+
+### On Progress to distribute 64bit
+
 ### Limitations
 
 - There are still some hard-coded paths which don't automatically relocate to
