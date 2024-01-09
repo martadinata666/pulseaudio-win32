@@ -1,14 +1,14 @@
 ### Base images ###
 
-FROM opensuse/tumbleweed AS mingw32
+FROM opensuse/tumbleweed AS mingw64
 RUN zypper --non-interactive addrepo https://download.opensuse.org/repositories/windows:mingw:win32/openSUSE_Tumbleweed/windows:mingw:win32.repo && \
     zypper --non-interactive --gpg-auto-import-keys refresh
 RUN zypper --non-interactive install \
         wget m4 git-core meson bsdtar gzip xmlstarlet findutils \
-        mingw32-filesystem mingw32-cross-gcc mingw32-cross-gcc-c++ mingw32-cross-binutils mingw32-cross-pkgconf && \
+        mingw64-filesystem mingw64-cross-gcc mingw64-cross-gcc-c++ mingw64-cross-binutils mingw64-cross-pkgconf && \
     zypper clean
 RUN mkdir -p /usr/local/share/meson/cross && \
-    wget -qO /usr/local/share/meson/cross/mingw32 https://raw.githubusercontent.com/mesonbuild/meson/ca30550e065991f9b2438e2a6fabc64fd2248806/cross/linux-mingw-w64-32bit.txt
+    wget -qO /usr/local/share/meson/cross/mingw64 https://raw.githubusercontent.com/mesonbuild/meson/ca30550e065991f9b2438e2a6fabc64fd2248806/cross/linux-mingw-w64-32bit.txt
 
 FROM alpine AS imgstuff
 RUN apk add --no-cache librsvg imagemagick
@@ -74,10 +74,10 @@ RUN set -x; \
 
 ### PulseAudio ###
 
-FROM mingw32 AS build-pulseaudio-stage1
+FROM mingw64 AS build-pulseaudio-stage1
 RUN zypper --non-interactive install \
-        intltool gettext-tools mingw32-libsndfile-devel mingw32-libintl-devel mingw32-win_iconv-devel mingw32-pcre-devel \
-        orc mingw32-libspeex-devel mingw32-liborc-devel mingw32-libtool && \
+        intltool gettext-tools mingw64-libsndfile-devel mingw64-libintl-devel mingw64-win_iconv-devel mingw64-pcre-devel \
+        orc mingw64-libspeex-devel mingw64-liborc-devel mingw64-libtool && \
     zypper clean
 RUN mkdir -p /src
 RUN git init /src/pulseaudio && \
@@ -91,7 +91,7 @@ RUN git -C /src/pulseaudio describe --always --tags | \
     sed -e "s/^v//g" -e "s/$/-paw32-${PAW32_VERSION}/g" | \
     tee /src/pulseaudio/.tarball-version /src/pulseaudio/.version /pulseaudio.version
 RUN meson setup \
-        --cross-file mingw32 \
+        --cross-file mingw64 \
         -Dtests=false \
         -Ddatabase=simple \
         -Ddoxygen=false \
@@ -121,9 +121,9 @@ RUN find /pulseaudio \
         # misc scripts (not compatible with windows)
         /pulseaudio/bin/pa-info && \
     rmdir /pulseaudio/share /pulseaudio/lib
-RUN bash /src/mingw32-deps.sh "https://download.opensuse.org/repositories/windows:/mingw:/win32/openSUSE_Tumbleweed" /pulseaudio/bin
+RUN bash /src/mingw64-deps.sh "https://download.opensuse.org/repositories/windows:/mingw:/win32/openSUSE_Tumbleweed" /pulseaudio/bin
 
-FROM mingw32 AS build-res
+FROM mingw64 AS build-res
 COPY --from=build-pulseaudio-stage1 /pulseaudio.version /pulseaudio.version
 RUN touch /tmp/pulseaudio.rc && \
     echo '#include "winver.h"' >> /tmp/pulseaudio.rc && \
@@ -144,7 +144,7 @@ RUN touch /tmp/pulseaudio.rc && \
     echo '    }' >> /tmp/pulseaudio.rc && \
     echo '}' >> /tmp/pulseaudio.rc
 # note: it needs to be in a subdir (/tmp) or windres gives an assertion error about include directories
-RUN i686-w64-mingw32-windres /tmp/pulseaudio.rc -o /pulseaudio.res
+RUN x86_64-w64-mingw64-windres /tmp/pulseaudio.rc -o /pulseaudio.res
 
 FROM reshack AS build-pulseaudio-stage2
 COPY --from=build-pulseaudio-stage1 /pulseaudio         /pulseaudio
@@ -163,14 +163,14 @@ RUN ResourceHacker \
         -res "Z:\\pulseaudio.ico" \
         -mask ICONGROUP,MAINICON,
 
-FROM mingw32 AS build-pulseaudio
+FROM mingw64 AS build-pulseaudio
 COPY --from=build-pulseaudio-stage2 /pulseaudio         /pulseaudio
 COPY --from=build-pulseaudio-stage2 /pulseaudio.version /
 RUN bsdtar -acf /pulseaudio.zip -C / pulseaudio
 
 ### pulseaudio (docs) ###
 
-FROM mingw32 as build-padoc
+FROM mingw64 as build-padoc
 COPY --from=build-pulseaudio-stage1 /build/pulseaudio/man /build/pulseaudio/man
 COPY --from=build-pulseaudio-stage1 /src/pulseaudio/man   /src/pulseaudio/man
 RUN zypper --non-interactive install libxslt-tools && \
@@ -184,12 +184,12 @@ RUN bsdtar -acf /padoc.zip -C / padoc
 
 ### pasvc ###
 
-FROM mingw32 AS build-pasvc
+FROM mingw64 AS build-pasvc
 COPY ./pasvc/* /src/
 RUN mkdir -p /pasvc/bin
 ARG PAW32_VERSION=unknown
-RUN i686-w64-mingw32-gcc -Wall -Wextra -Werror -D_WIN32_WINNT=_WIN32_WINNT_VISTA -DPAW32_VERSION='"'"${PAW32_VERSION}"'"' /src/pasvc.c   -o /pasvc/bin/pasvc.exe   -lshlwapi -lshell32
-RUN i686-w64-mingw32-gcc -Wall -Wextra -Werror -D_WIN32_WINNT=_WIN32_WINNT_VISTA -DPAW32_VERSION='"'"${PAW32_VERSION}"'"' /src/pasvcfw.c -o /pasvc/bin/pasvcfw.exe -lshlwapi -lole32 -loleaut32
+RUN x86_64-w64-mingw64-gcc -Wall -Wextra -Werror -D_WIN32_WINNT=_WIN32_WINNT_VISTA -DPAW32_VERSION='"'"${PAW32_VERSION}"'"' /src/pasvc.c   -o /pasvc/bin/pasvc.exe   -lshlwapi -lshell32
+RUN x86_64-w64-mingw64-gcc -Wall -Wextra -Werror -D_WIN32_WINNT=_WIN32_WINNT_VISTA -DPAW32_VERSION='"'"${PAW32_VERSION}"'"' /src/pasvcfw.c -o /pasvc/bin/pasvcfw.exe -lshlwapi -lole32 -loleaut32
 RUN bsdtar -acf /pasvc.zip -C / pasvc
 
 ### pasetup ###
