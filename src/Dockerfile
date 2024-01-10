@@ -5,7 +5,7 @@ RUN zypper --non-interactive addrepo obs://windows:mingw:win64 mingw64 && \
     zypper --non-interactive --gpg-auto-import-keys refresh
 RUN zypper --non-interactive install \
         wget m4 git-core meson bsdtar gzip xmlstarlet findutils \
-        mingw64-filesystem mingw64-cross-gcc mingw64-cross-gcc-c++ mingw64-cross-binutils mingw64-cross-pkgconf && \
+        mingw64-filesystem mingw64-cross-gcc mingw64-cross-gcc-c++ mingw64-cross-binutils mingw64-cross-pkgconf mingw64-libgobject && \
     rpm -ql mingw64-cross-gcc &&  \
     zypper clean
 RUN mkdir -p /usr/local/share/meson/cross && \
