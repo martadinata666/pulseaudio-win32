@@ -83,7 +83,7 @@ RUN mkdir -p /src
 RUN git init /src/pulseaudio && \
     git -C /src/pulseaudio remote add origin https://gitlab.freedesktop.org/pulseaudio/pulseaudio.git && \
     git -C /src/pulseaudio fetch origin && \
-    git -C /src/pulseaudio checkout stable-16.x
+    git -C /src/pulseaudio checkout master
 COPY ./pulseaudio/* /src/
 ### Manually patch
 #RUN git -C /src/pulseaudio apply /src/*.patch
