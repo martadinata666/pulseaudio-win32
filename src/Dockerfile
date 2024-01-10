@@ -98,7 +98,7 @@ RUN git -C /src/pulseaudio describe --always --tags | \
     sed -e "s/^v//g" -e "s/$/-paw32-${PAW32_VERSION}/g" | \
     tee /src/pulseaudio/.tarball-version /src/pulseaudio/.version /pulseaudio.version
 RUN meson setup \
-        --buildtype plain
+        --buildtype plain \
         --cross-file mingw64 \
         -Dalsa=disabed \
         -Ddoxygen=disabled \
