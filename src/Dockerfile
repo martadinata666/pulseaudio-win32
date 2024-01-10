@@ -99,6 +99,7 @@ RUN git -C /src/pulseaudio describe --always --tags | \
     tee /src/pulseaudio/.tarball-version /src/pulseaudio/.version /pulseaudio.version
 RUN meson setup \
         --cross-file mingw64 \
+        -Ddbus=disabled \
         -Dgsettings=disabled \
         -Dgstreamer=disabled \
         -Dtests=false \
