@@ -100,7 +100,7 @@ RUN git -C /src/pulseaudio describe --always --tags | \
 RUN meson setup \
         --buildtype plain \
         --cross-file mingw64 \
-        -Dalsa=disabed \
+        -Dalsa=disabled \
         -Ddoxygen=disabled \
         -Dgsettings=disabled  \ 
         -Dgstreamer=disabled \
