@@ -98,10 +98,32 @@ RUN git -C /src/pulseaudio describe --always --tags | \
     sed -e "s/^v//g" -e "s/$/-paw32-${PAW32_VERSION}/g" | \
     tee /src/pulseaudio/.tarball-version /src/pulseaudio/.version /pulseaudio.version
 RUN meson setup \
+        --buildtype plain
         --cross-file mingw64 \
-        -Ddbus=disabled \
-        -Dgsettings=disabled \
+        -Dalsa=disabed \
+        -Ddoxygen=disabled \
+        -Dgsettings=disabled  \ 
         -Dgstreamer=disabled \
+        -Dgtk=disabled \
+        -Djack=disabled \
+        -Dsamplerate=disabled \
+        -Dlirc=disabled \
+        -Dorc=disabled \
+        -Doss-output=disabled \
+        -Dopenssl=disabled \
+        -Dtests=false \
+        -Dudev=disabled \
+        -Dwebrtc-aec=disabled \
+        -Davahi=disabled \
+        -Dfftw=disabled \
+        -Dsoxr=disabled \ 
+        -Dglib=disabled \
+        -Dasyncns=disabled \ 
+        -Delogind=disabled \
+        -Dx11=disabled \
+        -Dsystemd=disabled \
+        -Dipv6=false
+        -Ddbus=disabled \
         -Dtests=false \
         -Ddatabase=simple \
         -Ddoxygen=false \
