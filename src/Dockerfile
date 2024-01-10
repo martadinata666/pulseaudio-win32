@@ -6,7 +6,6 @@ RUN zypper --non-interactive addrepo obs://windows:mingw:win64 mingw64 && \
 RUN zypper --non-interactive install \
         wget m4 git-core meson bsdtar gzip xmlstarlet findutils \
         mingw64-filesystem mingw64-cross-gcc mingw64-cross-gcc-c++ mingw64-cross-binutils mingw64-cross-pkgconf mingw64-glib2-devel-static && \
-    rpm -ql mingw64-cross-gcc &&  \
     zypper clean
 RUN mkdir -p /usr/local/share/meson/cross && \
     wget -qO /usr/local/share/meson/cross/mingw64 https://raw.githubusercontent.com/mesonbuild/meson/ca30550e065991f9b2438e2a6fabc64fd2248806/cross/linux-mingw-w64-64bit.txt
@@ -133,7 +132,7 @@ RUN meson setup \
         -Dmodlibexecdir=/pulseaudio/bin \
         -Dbluez5=disabled \
         # _WIN32_WINNT=_WIN32_WINNT_WIN7
-        -Dc_args="-D__USE_MINGW_ANSI_STDIO=1 -D_WIN32_WINNT=0x0601" \
+        -Dc_args="-D__USE_MINGW_ANSI_STDIO=1 -D_WIN32_WINNT=_WIN32_WINNT_VISTA" \
         /build/pulseaudio /src/pulseaudio
 RUN ninja -C /build/pulseaudio
 RUN meson install -C /build/pulseaudio
