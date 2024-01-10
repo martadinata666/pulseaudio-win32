@@ -99,6 +99,8 @@ RUN git -C /src/pulseaudio describe --always --tags | \
     tee /src/pulseaudio/.tarball-version /src/pulseaudio/.version /pulseaudio.version
 RUN meson setup \
         --cross-file mingw64 \
+        -Dgsettings=disabled \
+        -Dgstreamer=disabled \
         -Dtests=false \
         -Ddatabase=simple \
         -Ddoxygen=false \
@@ -107,8 +109,6 @@ RUN meson setup \
         -Dprefix=/pulseaudio \
         -Dmodlibexecdir=/pulseaudio/bin \
         -Dbluez5=disabled \
-        -Dgsettings=false \
-        -Dgstreamer=disabled \
         # _WIN32_WINNT=_WIN32_WINNT_WIN7
         -Dc_args="-D__USE_MINGW_ANSI_STDIO=1 -D_WIN32_WINNT=0x0601" \
         /build/pulseaudio /src/pulseaudio
