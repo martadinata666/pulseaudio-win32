@@ -122,7 +122,7 @@ RUN meson setup \
         -Delogind=disabled \
         -Dx11=disabled \
         -Dsystemd=disabled \
-        -Dipv6=false
+        -Dipv6=false \
         -Ddbus=disabled \
         -Dtests=false \
         -Ddatabase=simple \
